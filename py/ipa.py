@@ -1,8 +1,8 @@
 import json
-import requests
+from security import safe_requests
 
 def download_remote_file(remote_url, local_path):
-    response = requests.get(remote_url)
+    response = safe_requests.get(remote_url)
     if response.status_code == 200:
         with open(local_path, 'wb') as local_file:
             local_file.write(response.content)

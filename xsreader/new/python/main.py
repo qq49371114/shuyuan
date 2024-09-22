@@ -16,8 +16,8 @@ import urllib
 import ssl
 
 import pytz as pytz
-import requests
 from multiprocessing import Process, Queue, Manager
+from security import safe_requests
 
 isDebug = True
 jsonPath = '../sources.json'
@@ -179,7 +179,7 @@ def getResource(lock, path, srcUrl):
     res = None  # 返回值
     # 获取srcUrl链接资源
     while try_times < 5 and not success:
-        res = requests.get(srcUrl)
+        res = safe_requests.get(srcUrl)
         if res.status_code != 200:
             time.sleep(1)
             try_times = try_times + 1
@@ -205,7 +205,7 @@ def getResource(lock, path, srcUrl):
 def getHtmlResource(lock, path, user, repo, srcUrl):
     # github api 获取仓库根目录下文件目录
     repoApiUrl = 'https://api.github.com/repos/' + user + '/' + repo + '/contents'
-    reponse = requests.get(repoApiUrl).json()
+    reponse = safe_requests.get(repoApiUrl).json()
     if reponse:
         for i in reponse:
             name = i.get('name')
@@ -227,7 +227,7 @@ def getHtmlResource(lock, path, user, repo, srcUrl):
             elif type == 'dir':
                 # github api 获取仓库子目录下文件目录
                 repoApiUrl2 = 'https://api.github.com/repos/' + user + '/' + repo + '/contents' + '/' + dirpath
-                res = requests.get(repoApiUrl2).json()
+                res = safe_requests.get(repoApiUrl2).json()
                 for i2 in res:
                     if res:
                         _name = i2.get('name')
@@ -289,7 +289,7 @@ def downloadResource2(path, srcUrl):
         index = 0
         while True:
             try:
-                r = requests.get(srcUrl, stream=True)
+                r = safe_requests.get(srcUrl, stream=True)
                 with open(path, 'wb') as f:
                     for ch in r:
                         f.write(ch)
@@ -318,7 +318,7 @@ def downloadResource3(path, srcUrl):
     index = 0
     while True:
         try:
-            r = requests.get(srcUrl, stream=True)
+            r = safe_requests.get(srcUrl, stream=True)
             with open(path, 'wb') as f:
                 for ch in r:
                     f.write(ch)

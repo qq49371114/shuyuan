@@ -3,8 +3,8 @@ import json
 import time
 import logging
 from urllib3 import disable_warnings
-from requests import get
 from concurrent.futures import ThreadPoolExecutor
+from security import safe_requests
 
 # 禁用 SSL 警告
 disable_warnings()
@@ -31,7 +31,7 @@ class BookSourceChecker:
 
     def read_input_file(self):
         if self.type == 'url':
-            return get(url=self.input_path, verify=False).json()
+            return safe_requests.get(url=self.input_path, verify=False).json()
         elif os.path.isfile(self.input_path):
             with open(self.input_path, mode='r', encoding='utf-8') as f:
                 try:
@@ -68,7 +68,7 @@ class BookSourceChecker:
         }
 
         try:
-            status = get(url=abook.get('bookSourceUrl'), verify=False, headers=headers, timeout=timeout).status_code
+            status = safe_requests.get(url=abook.get('bookSourceUrl'), verify=False, headers=headers, timeout=timeout).status_code
 
             if status == 200:
                 return {'book': abook, 'status': True}
@@ -149,7 +149,7 @@ class BookSourceChecker:
 
         logging.info(f"Sending Telegram notification. Message: {message}")
 
-        response = get(url, params=data)
+        response = safe_requests.get(url, params=data)
         logging.info(f"Telegram notification response: {response.text}")
 
         if response.status_code != 200:

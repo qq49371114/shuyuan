@@ -1,9 +1,9 @@
 import re
-import requests
+from security import safe_requests
 
 def extract_tv_links_from_url(url, output_file_path):
     try:
-        response = requests.get(url)
+        response = safe_requests.get(url)
         response.raise_for_status()
 
         text = response.text

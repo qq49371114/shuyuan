@@ -3,6 +3,7 @@ import os.path
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from urllib3 import disable_warnings
+from security import safe_requests
 
 disable_warnings()
 
@@ -25,7 +26,7 @@ class BookChecker:
 
     def json_to_books(self):
         if self.type == 'url':
-            return requests.get(url=self.file, verify=False).json()
+            return safe_requests.get(url=self.file, verify=False).json()
         else:
             with open(self.file, mode='r', encoding='utf-8') as f:
                 return json.loads(f.read())
@@ -36,7 +37,7 @@ class BookChecker:
         }
 
         try:
-            status = requests.get(url=abook.get('bookSourceUrl'), verify=False, headers=headers, timeout=timeout).status_code
+            status = safe_requests.get(url=abook.get('bookSourceUrl'), verify=False, headers=headers, timeout=timeout).status_code
 
             if status == 200:
                 return {'book': abook, 'status': True}
@@ -104,7 +105,7 @@ class BookChecker:
         }
 
         try:
-            response = requests.get(url, params=params)
+            response = safe_requests.get(url, params=params)
             response.raise_for_status()
             print("\nTelegram通知已发送成功！")
         except requests.exceptions.RequestException as e:

@@ -4,11 +4,12 @@ import json
 import os
 from datetime import datetime, timedelta
 import re
+from security import safe_requests
 
 url = 'https://www.yckceo.com/yuedu/shuyuans/index.html'
 
 def parse_page():
-    response = requests.get(url, verify=False)
+    response = safe_requests.get(url, verify=False)
     soup = BeautifulSoup(response.text, 'html.parser')
 
     relevant_links = []
@@ -60,7 +61,7 @@ def download_json(url, output_dir='3.0'):
         print(f"Real URL: {final_url}")
 
         # Download the JSON content from the final URL
-        response = requests.get(final_url)
+        response = safe_requests.get(final_url)
 
         
         if response.status_code == 200:
