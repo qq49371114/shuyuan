@@ -31,7 +31,7 @@ class BookSourceChecker:
 
     def read_input_file(self):
         if self.type == 'url':
-            return get(url=self.input_path, verify=False).json()
+            return get(url=self.input_path, verify=False, timeout=60).json()
         elif os.path.isfile(self.input_path):
             with open(self.input_path, mode='r', encoding='utf-8') as f:
                 try:
@@ -149,7 +149,7 @@ class BookSourceChecker:
 
         logging.info(f"Sending Telegram notification. Message: {message}")
 
-        response = get(url, params=data)
+        response = get(url, params=data, timeout=60)
         logging.info(f"Telegram notification response: {response.text}")
 
         if response.status_code != 200:

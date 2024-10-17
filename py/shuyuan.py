@@ -23,7 +23,7 @@ time_ranges = {
 }
 
 def parse_page(url):
-    response = requests.get(url, verify=True)
+    response = requests.get(url, verify=True, timeout=60)
     if response.status_code != 200:
         print(f'Access {url}: response.status_code')
         return []
@@ -100,7 +100,7 @@ def download_json(url, output_base_dir=''):
 
 
         json_url = final_url.replace('.html', '.json')
-        response = requests.get(json_url, verify=True) 
+        response = requests.get(json_url, verify=True, timeout=60) 
 
         if response.status_code == 200:
             try:

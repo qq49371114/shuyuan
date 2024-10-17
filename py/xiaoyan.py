@@ -25,7 +25,7 @@ class BookChecker:
 
     def json_to_books(self):
         if self.type == 'url':
-            return requests.get(url=self.file, verify=False).json()
+            return requests.get(url=self.file, verify=False, timeout=60).json()
         else:
             with open(self.file, mode='r', encoding='utf-8') as f:
                 return json.loads(f.read())
@@ -104,7 +104,7 @@ class BookChecker:
         }
 
         try:
-            response = requests.get(url, params=params)
+            response = requests.get(url, params=params, timeout=60)
             response.raise_for_status()
             print("\nTelegram通知已发送成功！")
         except requests.exceptions.RequestException as e:
