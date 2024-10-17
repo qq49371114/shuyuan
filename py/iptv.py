@@ -3,7 +3,7 @@ import requests
 
 def extract_tv_links_from_url(url, output_file_path):
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         response.raise_for_status()
 
         text = response.text

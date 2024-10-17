@@ -2,7 +2,7 @@ import json
 import requests
 
 def download_remote_file(remote_url, local_path):
-    response = requests.get(remote_url)
+    response = requests.get(remote_url, timeout=60)
     if response.status_code == 200:
         with open(local_path, 'wb') as local_file:
             local_file.write(response.content)
